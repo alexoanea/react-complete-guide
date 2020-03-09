@@ -4,32 +4,46 @@ import Person from './Person/Person';
 
 class App extends Component {
   state = {
-    persosn: [
+    persons: [
       { name: 'Max', age: 28 },
       { name: 'Manu', age: 29 },
       { name: 'Steph', age: 31 }
     ]
   };
+
+  switchNameHandler = (newName) => {
+    this.setState({persons: [
+      { name: newName, age: 31 },
+      { name: 'Manu', age: 32 },
+      { name: 'Steph', age: 34 }
+    ]})
+  }
+
+  nameChangeHandler = (event) => {
+    this.setState({persons: [
+      { name: 'Max', age: 31 },
+      { name: event.target.value, age: 32 },
+      { name: 'Steph', age: 26 }
+    ]})
+  }
+
   render() {
     return (
       <div className="App">
         <h1>Welcome to React</h1>
         <p>This is really working</p>
-        <button>Switch Name</button>
-        <Person
-          name={this.state.persosn[0].name}
-          age={this.state.persosn[0].age}
-        >
-          My Hobbies: Hiking
-        </Person>
-        <Person
-          name={this.state.persosn[1].name}
-          age={this.state.persosn[1].age}
-        />
-        <Person
-          name={this.state.persosn[2].name}
-          age={this.state.persosn[2].age}
-        />
+        <button onClick={() => this.switchNameHandler('Maximilian')}>Switch Name</button>
+        <Person 
+          name={this.state.persons[0].name}
+          age={this.state.persons[0].age}
+          click={this.switchNameHandler.bind(this, 'Maxi!')}
+          changed={this.nameChangeHandler} >My Hobbies: Hiking</Person>
+        <Person 
+          name={this.state.persons[1].name} 
+          age={this.state.persons[1].age} />
+        <Person 
+          name={this.state.persons[2].name} 
+          age={this.state.persons[2].age} />
       </div>
     );
   }
