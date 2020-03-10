@@ -9,18 +9,14 @@ class App extends Component {
       { name: "Manu", age: 29 },
       { name: "Steph", age: 31 }
     ],
-    otherState: 'some other value',
+    otherState: "some other value",
     showPersons: false
-  }
+  };
 
-  switchNameHandler = newName => {
-    this.setState({
-      persons: [
-        { name: newName, age: 31 },
-        { name: "Manu", age: 32 },
-        { name: "Steph", age: 34 }
-      ]
-    });
+  deletePersonHandler = personIndex => {
+    const persons = this.state.persons;
+    persons.splice(personIndex, 1);
+    this.setState({ persons: persons });
   };
 
   nameChangeHandler = event => {
@@ -35,8 +31,8 @@ class App extends Component {
 
   togglePersonsHandler = () => {
     const doesShow = this.state.showPersons;
-    this.setState({showPersons: !doesShow});
-  }
+    this.setState({ showPersons: !doesShow });
+  };
 
   render() {
     const style = {
@@ -47,36 +43,32 @@ class App extends Component {
       cursor: "pointer"
     };
 
+    let persons = null;
+
+    if (this.state.showPersons) {
+      persons = (
+        <div>
+          {this.state.persons.map((person, index) => {
+            return (
+              <Person
+                click={() => this.deletePersonHandler(index)}
+                name={person.name}
+                age={person.age}
+              />
+            );
+          })}
+        </div>
+      );
+    }
+
     return (
       <div className="App">
         <h1>Welcome to React</h1>
         <p>This is really working</p>
-        <button
-          style={style}
-          onClick={this.togglePersonsHandler}>
+        <button style={style} onClick={this.togglePersonsHandler}>
           Toggle Persons
         </button>
-        { 
-          this.state.showPersons === true ?
-            <div>
-            <Person
-              name={this.state.persons[0].name}
-              age={this.state.persons[0].age}
-              click={this.switchNameHandler.bind(this, "Maxi!")}
-              changed={this.nameChangeHandler}
-            >
-              My Hobbies: Hiking
-            </Person>
-            <Person
-              name={this.state.persons[1].name}
-              age={this.state.persons[1].age}
-            />
-            <Person
-              name={this.state.persons[2].name}
-              age={this.state.persons[2].age}
-            />
-          </div> : null
-        }
+        {persons}
       </div>
     );
   }
